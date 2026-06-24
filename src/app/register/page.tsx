@@ -2,35 +2,32 @@
 
 import { showToast } from "@/app/components/toast/toast";
 import { api } from "@/lib/axios";
-import { IUser } from "@/proxy";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function LoginPage() {
+export default function RegisterPage() {
 
-  const [username, setUsernsme] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const router = useRouter()
 
-  const onLogin = async (e: React.SubmitEvent) => {
+  const onSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
+
     try {
-      const res = await api.post('user/login', {
+    const res = await api.post('user/register', {
         username,
         password
-      }, {
-        withCredentials: true
-      })
-
-      showToast(res.data.message, 'success')
-      const data = res.data.data as IUser
-      router.push(`/${data.username.toLocaleLowerCase()}`)
+    })
+    showToast(res.data.message, 'success')
+    router.push('/')
     } catch (error: any) {
       showToast(error.response.data.message, 'danger')
     }
   }
 
+  
   return (
     <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
       <div
@@ -39,20 +36,20 @@ export default function LoginPage() {
       >
         <div className="card-body p-4 p-md-5">
           <div className="d-flex align-items-center justify-content-center flex-column">
-            <h5 className="fw-bold mb-1">Selamat datang</h5>
-            <p className="text-muted small mb-4">Masuk ke Admin</p>
+            <h5 className="fw-bold mb-1">Register</h5>
+            <p className="text-muted small mb-4">Daftarkan Akun Anda</p>
           </div>
 
-          <form onSubmit= {onLogin}>
+          <form onSubmit={onSubmit}>
             <div className="mb-3">
-              <label className="form-label small fw-semibold">username</label>
+              <label className="form-label small fw-semibold">Username</label>
               <input
                 type="text"
                 name="username"
                 className="form-control form-control-sm py-2"
-                placeholder="masukan username"
+                placeholder="Masukan Username"
                 value={username}
-                onChange={(e) => setUsernsme(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
@@ -62,8 +59,8 @@ export default function LoginPage() {
                 type="password"
                 name="password"
                 className="form-control form-control-sm py-2"
-                placeholder="masukan password"
-                 value={password}
+                placeholder="Masukan Password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
@@ -73,22 +70,22 @@ export default function LoginPage() {
               className="btn w-100 py-2 text-white fw-semibold"
               style={{ background: "#1e2a3a", borderRadius: "8px" }}
             >
-              Masuk
+              Daftar
             </button>
           </form>
 
           <p className="text-center text-muted small mt-4 mb-0">
             Belum punya akun?
           </p>
-          <Link href={'/register'}> 
+          <Link href={'/'}>
             <button
-                type="button"
-                className="btn w-100 py-2 text-white fw-semibold"
-                style={{ background: "#1e2a3a", borderRadius: "8px" }}
-              >
-                Daftar
-              </button>
-              </Link>
+              type="button"
+              className="btn w-100 py-2 text-white fw-semibold"
+              style={{ background: "#1e2a3a", borderRadius: "8px" }}
+            >
+              Login
+            </button>
+          </Link>
         </div>
       </div>
     </div>
