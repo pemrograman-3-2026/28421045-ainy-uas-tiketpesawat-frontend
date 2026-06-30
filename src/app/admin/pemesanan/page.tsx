@@ -5,18 +5,16 @@ import { useEffect, useState } from "react"
 import { IPenumpang } from "../penumpang/page"
 import { IPenerbangan } from "../penerbangan/page"
 import Image from "next/image"
+import { showToast } from "@/app/components/toast/toast"
 
 export interface IPemesanan {
     id_pemesanan: number
     jumlah: string
     tanggal_pesan: string
-    jumlah_tiket: string
     total_harga: string
     image: string
     id_penumpang: number
     id_penerbangan: number
-    penumpang: IPenumpang
-    penerbangan: IPenerbangan
 }
 
 export default function AdminPemesananPage () {
@@ -37,6 +35,21 @@ export default function AdminPemesananPage () {
 
     }, [])
 
+    const deleteData = async (id: number) => {
+                const isAgree = confirm('Are you sure?')
+        
+                if (isAgree) {
+                    try {
+                      const res =  await api.delete(`pemesanan/delete/${id}`)
+                      showToast(res.data.message, 'success')
+                      getData()
+                    } catch (error: any) {
+                        showToast(error.response.data.message, 'danger')
+                        
+                    }
+                }
+            }
+
     return(
         <div>
             <div className="d-flex justify-content-between">
@@ -51,11 +64,11 @@ export default function AdminPemesananPage () {
                 <tr>
                     <td>jumlah</td>
                     <td>tanggal_pesan</td>
-                    <td>jumlah_tiket</td>
                     <td>total_harga</td>
+                    <td>id_penumpang</td>
+                    <td>id_penerbangan</td>
                     <td>image</td>
-                    <td>penumpang</td>
-                    <td>penerbangan</td>
+                     <td>ini aksi</td>
                 </tr>
                 </thead>
 
@@ -65,8 +78,9 @@ export default function AdminPemesananPage () {
                             <tr key={pemesanan.id_pemesanan}>
                                 <td>{pemesanan.jumlah}</td>
                                 <td>{pemesanan.tanggal_pesan}</td>
-                                <td>{pemesanan.jumlah_tiket}</td>
                                 <td>{pemesanan.total_harga}</td>
+                                <td>{pemesanan.id_penumpang}</td>
+                                <td>{pemesanan.id_penerbangan}</td>
                                 <td>
                                     <Image 
                                     width={300} 
@@ -76,13 +90,10 @@ export default function AdminPemesananPage () {
                                     unoptimized
                                     />
                                 </td>
-                                <td>{pemesanan.penumpang.nama}</td>
-                                <td>{pemesanan.penerbangan.kota_tujuan}</td>
-                                <td>ini aksi</td>
                                 <td>
                                     <div className="d-flex gap-2">
                                         <button type="button" className="btn btn-warning">Edit</button>
-                                        <button type="button" className="btn btn-danger">Delete</button>
+                                       <button onClick={() => deleteData(pemesanan.id_pemesanan)} type="button" className="btn btn-danger">Delete</button>
 
                                     </div>
                                 </td>

@@ -8,7 +8,7 @@ export default function UserMaskapaiPage () {
 
             const [maskapais, setMaskapais] = useState<IMaskapai[]>([])
 
-            const getData = async () => {
+        const getData = async () => {
         try {
             const res = await api.get('maskapai/getALL')
                 setMaskapais(res.data)

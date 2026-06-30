@@ -3,6 +3,7 @@ import { api, baseURL } from "@/lib/axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { IMaskapai } from "../maskapai/page"
+import { showToast } from "@/app/components/toast/toast"
 
 export interface IPenerbangan {
     id_penerbangan: number
@@ -33,6 +34,21 @@ export default function AdminPenerbanganPage () {
 
     }, [])
 
+     const deleteData = async (id: number) => {
+                    const isAgree = confirm('Are you sure?')
+            
+                    if (isAgree) {
+                        try {
+                          const res =  await api.delete(`penerbangan/delete/${id}`)
+                          showToast(res.data.message, 'success')
+                          getData()
+                        } catch (error: any) {
+                            showToast(error.response.data.message, 'danger')
+                            
+                        }
+                    }
+                }
+
     return(
         <div>
             <div className="d-flex justify-content-between">
@@ -51,6 +67,7 @@ export default function AdminPenerbanganPage () {
                     <td>waktu_tiba</td>
                     <td>harga</td>
                     <td>maskapai</td>
+                    <td>ini aksi</td>
                 </tr>
                 </thead>
 
@@ -64,11 +81,10 @@ export default function AdminPenerbanganPage () {
                                 <td>{penerbangan.waktu_tiba}</td>
                                 <td>{penerbangan.harga}</td>
                                 <td>{penerbangan.maskapai.nama_maskapai}</td>
-                                <td>ini aksi</td>
                                 <td>
                                     <div className="d-flex gap-2">
                                         <button type="button" className="btn btn-warning">Edit</button>
-                                        <button type="button" className="btn btn-danger">Delete</button>
+                                        <button onClick={() => deleteData(penerbangan.id_penerbangan)} type="button" className="btn btn-danger">Delete</button>
 
                                     </div>
                                 </td>

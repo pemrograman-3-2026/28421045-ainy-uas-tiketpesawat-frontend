@@ -1,4 +1,5 @@
 'use client'
+import { showToast } from "@/app/components/toast/toast"
 import { api, baseURL } from "@/lib/axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -8,7 +9,6 @@ export interface IPenumpang {
     nama: string
     email: string
     no_telp: string
-    pemesanan: string
 }
 
 export default function AdminPenumpangPage () {
@@ -29,6 +29,21 @@ export default function AdminPenumpangPage () {
 
     }, [])
 
+    const deleteData = async (id: number) => {
+                        const isAgree = confirm('Are you sure?')
+                
+                        if (isAgree) {
+                            try {
+                              const res =  await api.delete(`penumpang/delete/${id}`)
+                              showToast(res.data.message, 'success')
+                              getData()
+                            } catch (error: any) {
+                                showToast(error.response.data.message, 'danger')
+                                
+                            }
+                        }
+                    }
+
     return(
         <div>
             <div className="d-flex justify-content-between">
@@ -44,7 +59,7 @@ export default function AdminPenumpangPage () {
                     <td>nama</td>
                     <td>email</td>
                     <td>no_telp</td>
-                    <td>pemesanan</td>
+                    <td>ini aksi</td>
                 </tr>
                 </thead>
 
@@ -55,12 +70,10 @@ export default function AdminPenumpangPage () {
                                 <td>{penumpang.nama}</td>
                                 <td>{penumpang.email}</td>
                                 <td>{penumpang.no_telp}</td>
-                                <td>{penumpang.pemesanan}</td>
-                                <td>ini aksi</td>
                                 <td>
                                     <div className="d-flex gap-2">
                                         <button type="button" className="btn btn-warning">Edit</button>
-                                        <button type="button" className="btn btn-danger">Delete</button>
+                                        <button onClick={() => deleteData(penumpang.id_penumpang)} type="button" className="btn btn-danger">Delete</button>
 
                                     </div>
                                 </td>

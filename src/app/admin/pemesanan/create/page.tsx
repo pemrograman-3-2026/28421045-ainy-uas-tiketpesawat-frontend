@@ -9,7 +9,6 @@ import { IPenumpang } from "../../penumpang/page"
 export default function CreatePemesananPage () {
 
     const [jumlah, setJumlah] = useState('')
-    const [jumlah_tiket, setJumlah_Tiket] = useState ('')
     const [total_harga, setTotal_Harga] = useState ('')
     const [id_penumpang, setId_Penumpang] = useState ('')
     const [id_penerbangan, setId_Penerbangan] = useState ('')
@@ -48,7 +47,6 @@ export default function CreatePemesananPage () {
          try {
         const formData = new FormData()
         formData.append('jumlah', jumlah)
-        formData.append('jumlah_tiket', jumlah_tiket.toString())
         formData.append('total_harga', total_harga)
         formData.append('id_penumpang', id_penumpang.toString())
         formData.append('id_penerbangan', id_penerbangan.toString())
@@ -86,16 +84,6 @@ export default function CreatePemesananPage () {
                     onChange={(e) => setJumlah(e.target.value)}
                     />
                 </div>
-                 <div className="mb-3">
-                    <label className="from-label small fw-semibold">Jumlah_Tiket</label>
-                    <input
-                    type="text" 
-                    name="jumlah_tiket"
-                    className="form-control form-control-sm py2"
-                    value={jumlah_tiket}
-                    onChange={(e) => setJumlah_Tiket(e.target.value)}
-                    />
-                 </div>
                  <div className="mb-3">
                     <label className="from-label small fw-semibold">Total_Harga</label>
                     <input

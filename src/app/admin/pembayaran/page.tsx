@@ -1,4 +1,5 @@
 'use client'
+import { showToast } from "@/app/components/toast/toast"
 import { api, baseURL } from "@/lib/axios"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -9,7 +10,6 @@ export interface IPembayaran {
     metode: string
     tanggal_bayar: string
     id_pemesanan: number
-    pemesanan: string
 
 }
 
@@ -31,6 +31,21 @@ export default function AdminPembayaranPage () {
 
     }, [])
 
+    const deleteData = async (id: number) => {
+            const isAgree = confirm('Are you sure?')
+    
+            if (isAgree) {
+                try {
+                  const res =  await api.delete(`pembayaran/delete/${id}`)
+                  showToast(res.data.message, 'success')
+                  getData()
+                } catch (error: any) {
+                    showToast(error.response.data.message, 'danger')
+                    
+                }
+            }
+        }
+
     return(
         <div>
             <div className="d-flex justify-content-between">
@@ -47,7 +62,7 @@ export default function AdminPembayaranPage () {
                     <td>metode</td>
                     <td>tanggal_bayar</td>
                     <td>id_pemesanan</td>
-                    <td>pemesanan</td>
+                    <td>ini aksi</td>
                 </tr>
                 </thead>
 
@@ -59,12 +74,11 @@ export default function AdminPembayaranPage () {
                                 <td>{Pembayaran.metode}</td>
                                 <td>{Pembayaran.tanggal_bayar}</td>
                                 <td>{Pembayaran.id_pemesanan}</td>
-                                <td>{Pembayaran.pemesanan}</td>
-                                <td>ini aksi</td>
+
                                 <td>
                                     <div className="d-flex gap-2">
                                         <button type="button" className="btn btn-warning">Edit</button>
-                                        <button type="button" className="btn btn-danger">Delete</button>
+                                         <button onClick={() => deleteData(Pembayaran.id_pembayaran)} type="button" className="btn btn-danger">Delete</button>
 
                                     </div>
                                 </td>
